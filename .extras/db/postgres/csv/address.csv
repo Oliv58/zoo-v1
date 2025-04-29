@@ -1,0 +1,6 @@
+id;country;postal_Code;street;house_number;surname;zoo_id
+1;Germany;10115;Invalidenstraße;43;Schmidt;1
+10;Austria;50201;Getreidegasse;12;Müller;10
+20;Switzerland;8001;Bahnhofstrasse;88;Meier;20
+30;Germany;50667;Hohe Straße;7;Fischer;30
+40;Austria;1010;Kärntner Straße;21;Huber;40

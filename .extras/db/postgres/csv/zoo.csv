@@ -1,0 +1,6 @@
+id;version;designation;entrance_fee;open;homepage;created_at;updated_at
+1;0;Safari Park;20.00;true;safaripark.com;2025-04-22 00:00:00;2025-04-22 00:00:00
+10;0;Wildlife Reserve;15.00;false;wildlifereserve.org;2025-04-22 00:00:00;2025-04-22 00:00:00
+20;0;Oceanarium;25.00;true;oceanarium.com;2025-04-22 00:00:00;2025-04-22 00:00:00
+30;0;Mountain Zoo;18.00;true;mountainzoo.net;2025-04-22 00:00:00;2025-04-22 00:00:00
+40;0;Jungle Safari;22.00;false;junglesafari.org;2025-04-22 00:00:00;2025-04-22 00:00:00

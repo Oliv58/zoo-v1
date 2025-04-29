@@ -1,0 +1,71 @@
+@startuml ZooWriteService
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "@Injectable" as Injectable
+  hide Injectable circle
+
+  class "NotFoundException" as NotFoundException
+  hide NotFoundException circle
+}
+
+package @nestjs/typeorm {
+  class "@InjectRepository" as InjectRepository
+  hide InjectRepository circle
+}
+
+package typeorm {
+  class Repository
+  class DeleteResult
+}
+
+package zoo {
+  package entity #FFFFFF {
+    class Zoo << entity >>
+    class Address << entity >>
+    class Animal << entity >>
+  }
+
+  package service {
+    class ZooWriteService << control >> << @Injectable() >> {
+      + async create(zoo: Zoo): Promise<number>
+      + async update(params: UpdateParams): Promise<number>
+      + async delete(id: number): Promise<boolean>
+    }
+
+    class ZooReadService << control >>
+    class UpdateParams <<type>>
+  }
+}
+
+package mail {
+  class MailService
+}
+
+package logger {
+  class getLogger
+}
+
+' Beziehungen
+ZooWriteService o--> "1" Repository : #repo
+ZooWriteService o--> "1" ZooReadService : #readService
+ZooWriteService o--> "1" MailService : #mailService
+ZooWriteService ..> Zoo
+ZooWriteService ..> Address
+ZooWriteService ..> Animal
+ZooWriteService ..> DeleteResult
+ZooWriteService ..> getLogger
+ZooWriteService ..> NotFoundException
+ZooWriteService ..> Promise
+ZooWriteService ..> UpdateParams
+
+Zoo .[hidden].> Promise
+Address .[hidden].> Promise
+Animal .[hidden].> Promise
+
+hide empty members
+
+footer (c) Marco Frey
+
+@enduml

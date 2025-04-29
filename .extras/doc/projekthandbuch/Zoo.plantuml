@@ -1,0 +1,82 @@
+@startuml Entity
+
+package typeorm {
+  class "@Entity" as Entity
+  hide Entity circle
+  class "@Column" as Column
+  hide Column circle
+  class "@PrimaryColumn" as PrimaryColumn
+  hide PrimaryColumn circle
+  class "@PrimaryGeneratedColumn" as PrimaryGeneratedColumn
+  hide PrimaryGeneratedColumn circle
+  class "@OneToMany" as OneToMany
+  hide OneToMany circle
+  class "@ManyToOne" as ManyToOne
+  hide ManyToOne circle
+  class "@JoinColumn" as JoinColumn
+  hide JoinColumn circle
+  class "@OneToOne" as OneToOne
+  hide OneToOne circle
+  class "@CreateDateColumn" as CreateDateColumn
+  hide CreateDateColumn circle
+  class "@UpdateDateColumn" as UpdateDateColumn
+  hide UpdateDateColumn circle
+  class "@VersionColumn" as VersionColumn
+  hide VersionColumn circle
+}
+
+package zoo.entity {
+  class "type AnimalSpecies = 'mammal' | 'fish' | 'reptile' | 'amphibian' | 'bird' | 'invertebrate'" as AnimalSpecies
+  hide AnimalSpecies circle
+
+  class Zoo <<entity>> <<@Entity>> {
+    @PrimaryGeneratedColumn() id: number
+    @VersionColumn() version: number
+    @Column() designation: string
+    @Column() entranceFee: Decimal
+    @Column() open: boolean
+    @Column() homepage: string
+    @CreateDateColumn() createdAt: Date
+    @UpdateDateColumn() updatedAt: Date
+  }
+
+  class Address <<entity>> <<@Entity>> {
+    @PrimaryGeneratedColumn() id: number
+    @Column() street: string
+    @Column() postalCode: string
+    @Column() city: string
+    @Column() houseNumber: string
+    @Column() country: string
+    @Column() surname: string
+
+  }
+
+  class Animal <<entity>> <<@Entity>> {
+    @PrimaryGeneratedColumn() id: number
+    @VersionColumn() version: number
+    @Column() designation: string
+    @Column() species: AnimalSpecies
+    @Column() weight: Decimal
+  }
+
+  class AnimalFile <<entity>> <<@Entity>> {
+    @PrimaryGeneratedColumn() id: number
+    @Column() filename: string
+    @Column() contentType: string
+  }
+
+  Zoo *--> "1" Address : @OneToOne()\naddress
+  Zoo *--> "*" Animal : @OneToMany()\nanimals
+  Animal *--> "1" Zoo : @ManyToOne()\nzoo
+  Animal *--> "1" AnimalFile : @OneToOne()\nanimalFile
+
+  Zoo .right.> Entity
+  Animal .right.> AnimalSpecies
+}
+
+hide empty members
+
+footer (c) Marco Frey
+
+@enduml
+ 

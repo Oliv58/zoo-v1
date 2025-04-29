@@ -1,0 +1,6 @@
+id;version;designation;species;weight;zoo_id
+1;0;Löwe;mammal;190.5;1
+10;0;Papagei;bird;1.2;10
+20;0;Krokodil;reptile;500.0;20
+30;0;Tiger;mammal;220.3;30
+40;0;Pinguin;bird;12.8;40
