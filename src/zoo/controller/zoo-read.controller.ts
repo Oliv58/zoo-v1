@@ -30,14 +30,14 @@ import { Request, Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Zoo } from '../entity/zoo.entity.js';
-import { type SearchCriteria } from '../service/searchCriteria.js';   
+import { type SearchCriteria } from '../service/searchCriteria.js';
 import { createPage } from './page.js';
 import { createPageable } from '../service/pageable.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
 import { ZooReadService } from '../service/zoo-read.service.js';
 
-export class ZooQuery implements SearchCriteria{
+export class ZooQuery implements SearchCriteria {
     @ApiProperty({ required: false })
     declare readonly designation?: string;
 
@@ -61,7 +61,7 @@ export class ZooReadController {
     readonly #service: ZooReadService;
 
     readonly #logger = getLogger(ZooReadController.name);
-    
+
     constructor(service: ZooReadService) {
         this.#service = service;
     }
@@ -94,17 +94,20 @@ export class ZooReadController {
         @Query('withAnimals') withAnimals: string | undefined,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
-    ): Promise<Response<Zoo | undefined>>{
+    ): Promise<Response<Zoo | undefined>> {
         this.#logger.debug('getById: id=%s, version=%s', id, version);
 
         if (req.accepts(['json', 'html']) === false) {
             this.#logger.debug('getById: accepted=%o', req.accepted);
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
-        
+
         const withAnimalsBool = withAnimals === 'true';
 
-        const zoo = await this.#service.findById({ id, withAnimals: withAnimalsBool });
+        const zoo = await this.#service.findById({
+            id,
+            withAnimals: withAnimalsBool,
+        });
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug('getById(): zoo=%s', zoo.toString());
             this.#logger.debug('getById(): titel=%o', zoo.address);
@@ -125,25 +128,25 @@ export class ZooReadController {
     @Get()
     @Get()
     @Public()
-    @ApiOperation({ summary: 'Suche mit Suchkriterien' })
-    @ApiOkResponse({ description: 'Eine evtl. leere Liste mit Büchern' })
+    @ApiOperation({ summary: 'searching with searchcriteria' })
+    @ApiOkResponse({ description: 'a list (maybe empty) of zoos' })
     async get(
         @Query() query: ZooQuery,
         @Req() req: Request,
         @Res() res: Response,
     ): Promise<Response<Zoo[] | undefined>> {
         this.#logger.debug('get: query=%o', query);
-    
+
         if (req.accepts(['json', 'html']) === false) {
             this.#logger.debug('get: accepted=%o', req.accepted);
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
-       }
-    
+        }
+
         const { page, size } = query;
         delete query['page'];
         delete query['size'];
         this.#logger.debug('get: page=%s, size=%s', page, size);
-    
+
         const keys = Object.keys(query) as (keyof ZooQuery)[];
         keys.forEach((key) => {
             if (query[key] === undefined) {
@@ -151,12 +154,12 @@ export class ZooReadController {
             }
         });
         this.#logger.debug('get: query=%o', query);
-    
+
         const pageable = createPageable({ number: page, size });
         const zooSlice = await this.#service.find(query, pageable);
         const zooPage = createPage(zooSlice, pageable);
         this.#logger.debug('get: zooPage=%o', zooPage);
-    
+
         return res.json(zooPage).send();
     }
 }

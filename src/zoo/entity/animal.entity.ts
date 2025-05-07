@@ -1,4 +1,4 @@
-import {ApiProperty} from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger';
 import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import {
     Column,
@@ -13,11 +13,16 @@ import { Zoo } from './zoo.entity.js';
 import { AnimalFile } from './animalFile.entity.js';
 import { DecimalTransformer } from './decimal-transformer.js';
 
-export type AnimalSpecies = 'mammal' | 'fish' | 'reptile' | 'amphibian' | 'bird' | 'invertebrate';
+export type AnimalSpecies =
+    | 'mammal'
+    | 'fish'
+    | 'reptile'
+    | 'amphibian'
+    | 'bird'
+    | 'invertebrate';
 
 @Entity()
-export class Animal{
-
+export class Animal {
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
@@ -25,26 +30,26 @@ export class Animal{
     version: number | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Lion', type: String})     
+    @ApiProperty({ example: 'Lion', type: String })
     designation: string | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'mammal', type: String})
+    @ApiProperty({ example: 'mammal', type: String })
     species: AnimalSpecies | undefined;
 
     @Column('decimal', {
-            precision: 6,
-            scale: 3,
-            transformer: new DecimalTransformer(),
-        })
-    @ApiProperty({ example: 110, type: Number})
+        precision: 6,
+        scale: 3,
+        transformer: new DecimalTransformer(),
+    })
+    @ApiProperty({ example: 110, type: Number })
     weight: Decimal | undefined;
 
     @ManyToOne(() => Zoo, (zoo: Zoo) => zoo.animals)
     @JoinColumn({ name: 'zoo_id' })
     zoo: Zoo | undefined;
 
-    @OneToOne(()=> AnimalFile, (animalFile: AnimalFile)=>animalFile.animal)
+    @OneToOne(() => AnimalFile, (animalFile: AnimalFile) => animalFile.animal)
     animalFile: AnimalFile | undefined;
 
     public toString = (): string =>
@@ -55,5 +60,4 @@ export class Animal{
             animalSpecies: this.species,
             weight: this.weight,
         });
-     
 }

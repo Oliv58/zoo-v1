@@ -22,7 +22,9 @@ export class AnimalFile {
     @Column('varchar')
     filename!: string;
 
-    @OneToOne(() => Animal, (animal) => animal.animalFile, { onDelete: 'CASCADE' })
+    @OneToOne(() => Animal, (animal) => animal.animalFile, {
+        onDelete: 'CASCADE',
+    })
     @JoinColumn({ name: 'animal_id' })
     animal: Animal | undefined;
 }

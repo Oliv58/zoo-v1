@@ -56,7 +56,7 @@ if (keycloak !== undefined && keycloak !== null) {
     }
     if (
         keycloak.tokenValidation !== undefined &&
-        Object.values(TokenValidation).includes(keycloak.tokenValidation) // eslint-disable-line @typescript-eslint/no-unsafe-argument
+        !Object.values(TokenValidation).includes(keycloak.tokenValidation)
     ) {
         throw new TypeError(
             'Der konfigurierte Wert für TokenValidation bei Keycloak ist ungültig',

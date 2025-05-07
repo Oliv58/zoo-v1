@@ -11,7 +11,6 @@ import { Zoo } from './zoo.entity.js';
 
 @Entity()
 export class Address {
-
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
@@ -20,11 +19,11 @@ export class Address {
     country: string | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: '88213', type: String})
+    @ApiProperty({ example: '88213', type: String })
     postalCode: string | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Kriegsstraße', type: String})
+    @ApiProperty({ example: 'Kriegsstraße', type: String })
     street: string | undefined;
 
     @Column({
@@ -34,7 +33,7 @@ export class Address {
     houseNumber: number | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Miller', type: String})
+    @ApiProperty({ example: 'Miller', type: String })
     surname: string | undefined;
 
     @OneToOne(() => Zoo, (zoo: Zoo) => zoo.address)
@@ -50,5 +49,4 @@ export class Address {
             houseNumber: this.houseNumber,
             surname: this.surname,
         });
-
 }

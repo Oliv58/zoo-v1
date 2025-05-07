@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
-import { Animal  } from '../entity/animal.entity.js';
+import { Animal } from '../entity/animal.entity.js';
 import { Address } from '../entity/address.entity.js';
 import { Zoo } from '../entity/zoo.entity.js';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './pageable.js';
@@ -96,49 +96,56 @@ export class QueryBuilder {
             homepage,
             pageable,
         );
-    
+
         let queryBuilder = this.#repo.createQueryBuilder(this.#zooAlias);
         let useWhere = true;
-    
-        const criteria: Record<string, unknown> = { entranceFee, open, designation, homepage };
-    
+
+        const criteria: Record<string, unknown> = {
+            entranceFee,
+            open,
+            designation,
+            homepage,
+        };
+
         Object.entries(criteria).forEach(([key, value]) => {
             if (value === undefined) {
                 return;
             }
-    
+
             let condition = '';
             const param: Record<string, any> = {};
-    
+
             switch (key) {
                 case 'entranceFee':
-                    const entranceFeeNumber = typeof value === 'string' ? Number(value) : value;
+                    const entranceFeeNumber =
+                        typeof value === 'string' ? Number(value) : value;
                     if (Number.isNaN(entranceFeeNumber)) {
                         return;
                     }
                     condition = `${this.#zooAlias}.entranceFee <= :entranceFee`;
                     param.entranceFee = entranceFeeNumber;
                     break;
-    
+
                 case 'open':
-                    const openBoolean = typeof value === 'string'
-                        ? value.toLowerCase() === 'true'
-                        : value;
+                    const openBoolean =
+                        typeof value === 'string'
+                            ? value.toLowerCase() === 'true'
+                            : value;
                     condition = `${this.#zooAlias}.open = :open`;
                     param.open = openBoolean;
                     break;
-    
+
                 case 'designation':
                     condition = `${this.#zooAlias}.designation ILIKE :designation`;
                     param.designation = `%${value}%`;
                     break;
-    
+
                 case 'homepage':
                     condition = `${this.#zooAlias}.homepage = :homepage`;
                     param.homepage = value;
                     break;
             }
-    
+
             if (condition) {
                 queryBuilder = useWhere
                     ? queryBuilder.where(condition, param)
@@ -146,9 +153,9 @@ export class QueryBuilder {
                 useWhere = false;
             }
         });
-    
+
         this.#logger.debug('build: sql=%s', queryBuilder.getSql());
-    
+
         if (pageable?.size === 0) {
             return queryBuilder;
         }
@@ -158,4 +165,4 @@ export class QueryBuilder {
         this.#logger.debug('take=%s, skip=%s', size, skip);
         return queryBuilder.take(size).skip(skip);
     }
-}    
+}

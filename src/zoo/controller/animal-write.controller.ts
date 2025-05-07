@@ -52,7 +52,7 @@ export class AnimalWriteController {
         this.#service = service;
     }
 
-@Post(':id')
+    @Post(':id')
     @Public()
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Upload binary file with an image' })
@@ -80,8 +80,6 @@ export class AnimalWriteController {
             file.originalname,
             file.mimetype,
         );
-
-        // TODO Dateigroesse pruefen
 
         await this.#service.addFile(
             id,

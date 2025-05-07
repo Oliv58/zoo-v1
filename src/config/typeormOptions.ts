@@ -63,8 +63,7 @@ if (db !== undefined) {
 const database = (db?.name as string | undefined) ?? Zoo.name.toLowerCase();
 
 const host = (db?.host as string | undefined) ?? 'localhost';
-const username =
-    (db?.username as string | undefined) ?? Zoo.name.toLowerCase();
+const username = (db?.username as string | undefined) ?? Zoo.name.toLowerCase();
 const pass = (db?.password as string | undefined) ?? 'p';
 const passAdmin = (db?.passwordAdmin as string | undefined) ?? 'p';
 

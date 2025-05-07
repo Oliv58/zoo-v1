@@ -40,7 +40,12 @@ import { AnimalWriteService } from './service/animal-write.service.js';
  */
 @Module({
     imports: [KeycloakModule, MailModule, TypeOrmModule.forFeature(entities)],
-    controllers: [ZooReadController, ZooWriteController, AnimalReadController, AnimalWriteController],
+    controllers: [
+        ZooReadController,
+        ZooWriteController,
+        AnimalReadController,
+        AnimalWriteController,
+    ],
     // Provider sind z.B. Service-Klassen fuer DI
     providers: [
         ZooReadService,
@@ -50,6 +55,11 @@ import { AnimalWriteService } from './service/animal-write.service.js';
         QueryBuilder,
     ],
     // Export der Provider fuer DI in anderen Modulen
-    exports: [ZooReadService, ZooWriteService, AnimalReadService, AnimalWriteService],
+    exports: [
+        ZooReadService,
+        ZooWriteService,
+        AnimalReadService,
+        AnimalWriteService,
+    ],
 })
 export class ZooModule {}

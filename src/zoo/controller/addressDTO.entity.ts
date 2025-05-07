@@ -1,23 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    IsOptional,
-    IsInt,
-    MaxLength,
-    MinLength,
-} from 'class-validator';
+import { IsOptional, IsInt, MaxLength, MinLength } from 'class-validator';
 
-export class AddressDTO{
+export class AddressDTO {
     @MaxLength(32)
     @MinLength(3)
-    @ApiProperty({ example: 'Germany', type: String})
+    @ApiProperty({ example: 'Germany', type: String })
     readonly country!: string;
 
     @MaxLength(10)
-    @ApiProperty({ example: '88213', type: String})
+    @ApiProperty({ example: '88213', type: String })
     readonly postalCode!: string;
 
     @MaxLength(32)
-    @ApiProperty({ example: 'Kriegsstraße', type: String})
+    @ApiProperty({ example: 'Kriegsstraße', type: String })
     readonly street!: string;
 
     @IsInt()
@@ -26,7 +21,6 @@ export class AddressDTO{
     readonly houseNumber!: number;
 
     @MaxLength(32)
-    @ApiProperty({ example: 'Miller', type: String})
+    @ApiProperty({ example: 'Miller', type: String })
     readonly surname!: string;
-
 }

@@ -24,7 +24,7 @@ import { Request, Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { Readable } from 'node:stream';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { AnimalReadService } from '../service/animal-read.service.js';  
+import { AnimalReadService } from '../service/animal-read.service.js';
 import { Animal } from '../entity/animal.entity.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
@@ -36,7 +36,7 @@ export class AnimalReadController {
     readonly #service: AnimalReadService;
 
     readonly #logger = getLogger(AnimalReadController.name);
-    
+
     constructor(service: AnimalReadService) {
         this.#service = service;
     }
@@ -68,7 +68,7 @@ export class AnimalReadController {
         @Req() req: Request,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
-    ): Promise<Response<Animal | undefined>>{
+    ): Promise<Response<Animal | undefined>> {
         this.#logger.debug('getById: id=%s, version=%s', id, version);
 
         if (req.accepts(['json', 'html']) === false) {

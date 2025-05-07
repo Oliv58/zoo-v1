@@ -47,3 +47,4 @@ export const env = {
 /* eslint-enable @typescript-eslint/naming-convention */
 
 console.debug('NODE_ENV = %s', NODE_ENV);
+console.debug('CLIENT_SECRET = %s', CLIENT_SECRET);

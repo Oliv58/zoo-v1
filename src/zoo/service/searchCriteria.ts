@@ -22,7 +22,7 @@
  * Typdefinition für `find` in `buch-read.service` und `QueryBuilder.build()`.
  */
 export interface SearchCriteria {
-    readonly designation?: string,
+    readonly designation?: string;
     readonly entranceFee?: number | string;
     readonly open?: boolean | string;
     readonly homepage?: string;

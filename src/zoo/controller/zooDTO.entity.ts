@@ -18,7 +18,7 @@ import {
     ValidateNested,
 } from 'class-validator';
 import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
-import { AnimalDTO } from './animalDTO.entity.js'; 
+import { AnimalDTO } from './animalDTO.entity.js';
 import { AddressDTO } from './addressDTO.entity.js';
 import { DecimalMin, DecimalMax, number2Decimal } from './decimal-helper.js';
 
@@ -33,10 +33,12 @@ export class ZooDtoCore {
 
     @Transform(number2Decimal)
     @Validate(DecimalMin, [Decimal(0)], {
-                 message: 'entranceFee must be positiv' ,})
+        message: 'entranceFee must be positiv',
+    })
     @Validate(DecimalMax, [Decimal(10000)], {
-                 message: 'entranceFee must be cheaper then 100000'})
-    @ApiProperty({ example: 25.3, type: Number})
+        message: 'entranceFee must be cheaper then 100000',
+    })
+    @ApiProperty({ example: 25.3, type: Number })
     readonly entranceFee!: Decimal;
 
     @IsBoolean()
@@ -48,10 +50,9 @@ export class ZooDtoCore {
     @IsOptional()
     @ApiProperty({ example: 'https://zoo.de/', type: String })
     readonly homepage: string | undefined;
-
 }
 
-export class ZooFullDTO extends ZooDtoCore  {
+export class ZooFullDTO extends ZooDtoCore {
     @IsOptional()
     @IsArray()
     @ValidateNested()
@@ -63,6 +64,5 @@ export class ZooFullDTO extends ZooDtoCore  {
     @Type(() => AddressDTO)
     @ApiProperty({ type: AddressDTO })
     readonly address!: AddressDTO;
-
 }
 /* eslint-enable max-classes-per-file, @typescript-eslint/no-magic-numbers */

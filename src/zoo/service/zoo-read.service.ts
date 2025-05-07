@@ -29,10 +29,7 @@ export class ZooReadService {
 
     readonly #logger = getLogger(ZooReadService.name);
 
-
-    constructor(
-        queryBuilder: QueryBuilder,
-    ) {
+    constructor(queryBuilder: QueryBuilder) {
         const zooDummy = new Zoo();
         this.#zooProps = Object.getOwnPropertyNames(zooDummy);
         this.#queryBuilder = queryBuilder;
@@ -50,15 +47,9 @@ export class ZooReadService {
             throw new NotFoundException(`there is no zoo with id: ${id}.`);
         }
         if (this.#logger.isLevelEnabled('debug')) {
-            this.#logger.debug(
-                'findById: zoo=%s, titel=%o',
-                zoo.toString(),
-            );
+            this.#logger.debug('findById: zoo=%s, titel=%o', zoo.toString());
             if (withAnimals) {
-                this.#logger.debug(
-                    'findById: animals=%o',
-                    zoo.animals,
-                );
+                this.#logger.debug('findById: animals=%o', zoo.animals);
             }
         }
         return zoo;
@@ -76,7 +67,7 @@ export class ZooReadService {
         if (searchCriteria === undefined) {
             return await this.#findAll(pageable);
         }
-        const keys = Object.keys(searchCriteria);    
+        const keys = Object.keys(searchCriteria);
         if (keys.length === 0) {
             return await this.#findAll(pageable);
         }

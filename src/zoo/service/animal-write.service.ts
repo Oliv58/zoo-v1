@@ -41,17 +41,17 @@ export class AnimalWriteService {
             filename,
             mimetype,
         );
-    
+
         // Hole das Tier anhand der ID
         const animal = await this.#readService.findById({ id: animalId });
-    
+
         // Lösche alle alten Dateien des Tiers
         await this.#fileRepo
             .createQueryBuilder('animal_file')
             .delete()
             .where('animal_id = :id', { id: animalId })
             .execute();
-    
+
         // Erstelle eine neue Datei und verknüpfe sie mit dem Tier
         const file = this.#fileRepo.create({
             filename,
@@ -59,19 +59,18 @@ export class AnimalWriteService {
             mimetype,
             animal, // Verknüpfung zum Tier
         });
-    
+
         // Speichere die Datei in der animal_file Tabelle
         await this.#fileRepo.save(file);
-    
+
         // Erstelle ein neues Animal-Objekt und setze das File
         const updatedAnimal = Object.assign(new Animal(), animal, {
             animalFile: file,
         });
-    
+
         // Speichere das Tier mit der Datei-Verknüpfung
         await this.#repo.save(updatedAnimal); // Speichere das Tier mit der Verknüpfung
-    
+
         return file;
     }
-    
 }

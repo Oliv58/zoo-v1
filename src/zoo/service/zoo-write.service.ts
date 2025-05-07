@@ -63,45 +63,45 @@ export class ZooWriteService {
     }
 
     async update({ id, zoo, version }: UpdateParams) {
-            this.#logger.debug(
-                'update: id=%d, zoo=%o, version=%s',
-                id,
-                zoo,
-                version,
-            );
-            if (id === undefined) {
-                this.#logger.debug('update: invalid id');
-                throw new NotFoundException(`no zoo with id: ${id}.`);
-            }
-    
-            const validateResult = await this.#validateUpdate(zoo, id, version);
-            this.#logger.debug('update: validateResult=%o', validateResult);
-            if (!(validateResult instanceof Zoo)) {
-                return validateResult;
-            }
-    
-            const zooNew = validateResult;
-            const merged = this.#repo.merge(zooNew, zoo);
-            this.#logger.debug('update: merged=%o', merged);
-            const updated = await this.#repo.save(merged); // implizite Transaktion
-            this.#logger.debug('update: updated=%o', updated);
-    
-            return updated.version!;
+        this.#logger.debug(
+            'update: id=%d, zoo=%o, version=%s',
+            id,
+            zoo,
+            version,
+        );
+        if (id === undefined) {
+            this.#logger.debug('update: invalid id');
+            throw new NotFoundException(`no zoo with id: ${id}.`);
         }
-    
-        /**
-         * Ein Buch wird asynchron anhand seiner ID gelöscht.
-         *
-         * @param id ID des zu löschenden Buches
-         * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
-         */
+
+        const validateResult = await this.#validateUpdate(zoo, id, version);
+        this.#logger.debug('update: validateResult=%o', validateResult);
+        if (!(validateResult instanceof Zoo)) {
+            return validateResult;
+        }
+
+        const zooNew = validateResult;
+        const merged = this.#repo.merge(zooNew, zoo);
+        this.#logger.debug('update: merged=%o', merged);
+        const updated = await this.#repo.save(merged); // implizite Transaktion
+        this.#logger.debug('update: updated=%o', updated);
+
+        return updated.version!;
+    }
+
+    /**
+     * Ein Buch wird asynchron anhand seiner ID gelöscht.
+     *
+     * @param id ID des zu löschenden Buches
+     * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
+     */
     async delete(id: number) {
         this.#logger.debug('delete: id=%d', id);
         const zoo = await this.#readService.findById({
             id,
             withAnimals: true,
         });
-    
+
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
             const addressId = zoo.address?.id;
@@ -112,57 +112,58 @@ export class ZooWriteService {
             for (const animal of animals) {
                 await transactionalMgr.delete(Animal, animal.id);
             }
-    
+
             deleteResult = await transactionalMgr.delete(Zoo, id);
             this.#logger.debug('delete: deleteResult=%o', deleteResult);
         });
-    
+
         return (
             deleteResult?.affected !== undefined &&
             deleteResult.affected !== null &&
             deleteResult.affected > 0
         );
     }
-    
+
     async #validateCreate({ designation }: Zoo): Promise<undefined> {
         this.#logger.debug('#validateCreate: designation=%s', designation);
         if (await this.#repo.existsBy({ designation })) {
             throw new DesignationExistsException(designation);
         }
     }
-    
+
     async #sendmail(zoo: Zoo) {
         const subject = `new zoo ${zoo.id}`;
         const body = `zoo with the name <strong>${zoo.designation}</strong> is created`;
         await this.#mailService.sendmail({ subject, body });
     }
-    
-    async #validateUpdate(zoo: Zoo, id: number, versionStr: string): Promise<Zoo> {
+
+    async #validateUpdate(
+        zoo: Zoo,
+        id: number,
+        versionStr: string,
+    ): Promise<Zoo> {
         this.#logger.debug(
             '#validateUpdate: zoo=%o, id=%s, versionStr=%s',
             zoo,
             id,
             versionStr,
         );
-    
+
         const version = Number(versionStr);
         if (Number.isNaN(version)) {
             throw new VersionInvalidException(versionStr);
         }
         this.#logger.debug('#validateUpdate: parsed version=%d', version);
-    
+
         const zooDb = await this.#readService.findById({ id });
         const versionDb = zooDb.version!;
         this.#logger.debug('#validateUpdate: versionDb=%d', versionDb);
-    
+
         if (version !== versionDb) {
             throw new VersionOutdatedException(versionDb);
         }
-    
+
         this.#logger.debug('#validateUpdate: zooDb=%o', zooDb);
         return zooDb;
     }
-    
 }
-
-

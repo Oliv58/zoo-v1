@@ -48,7 +48,9 @@ export class AnimalReadService {
     /**
      * Gibt die zugehörige Datei für ein Animal zurück
      */
-    async findFileByAnimalId(animalId: number): Promise<Readonly<AnimalFile> | undefined> {
+    async findFileByAnimalId(
+        animalId: number,
+    ): Promise<Readonly<AnimalFile> | undefined> {
         this.#logger.debug('findFileByAnimalId: animalId=%d', animalId);
 
         const file = await this.animalFileRepo.findOne({
@@ -62,6 +64,6 @@ export class AnimalReadService {
             this.#logger.debug('findFileByAnimalId: file=%o', file);
         }
 
-        return file ?? undefined; 
+        return file ?? undefined;
     }
 }

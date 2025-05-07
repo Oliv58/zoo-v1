@@ -32,7 +32,7 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
-import {  Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
@@ -51,10 +51,10 @@ const MSG_FORBIDDEN = 'Unauthorized: token lacks required permissions.';
 @Controller(paths.rest)
 @UseGuards(AuthGuard)
 @UseInterceptors(ResponseTimeInterceptor)
-@ApiTags('Zoo REST-API')                       
-@ApiBearerAuth()                               
-export class ZooWriteController {              
-    readonly #service: ZooWriteService;       
+@ApiTags('Zoo REST-API')
+@ApiBearerAuth()
+export class ZooWriteController {
+    readonly #service: ZooWriteService;
 
     readonly #logger = getLogger(ZooWriteController.name);
 
@@ -157,9 +157,9 @@ export class ZooWriteController {
             houseNumber: addressDTO.houseNumber,
             surname: addressDTO.surname,
             zoo: undefined,
-        }
+        };
 
-        const animals = zooDTO.animals?.map((animalDTO)=>{
+        const animals = zooDTO.animals?.map((animalDTO) => {
             const animal: Animal = {
                 id: undefined,
                 version: undefined,
@@ -186,7 +186,7 @@ export class ZooWriteController {
         };
 
         zoo.address.zoo = zoo;
-        zoo.animals?.forEach((animal)=> {
+        zoo.animals?.forEach((animal) => {
             animal.zoo = zoo;
         });
 
@@ -203,7 +203,7 @@ export class ZooWriteController {
             homepage: zooDto.homepage,
             address: undefined,
             animals: undefined,
-            createdAt: new Date(),            
+            createdAt: new Date(),
             updatedAt: new Date(),
         };
     }

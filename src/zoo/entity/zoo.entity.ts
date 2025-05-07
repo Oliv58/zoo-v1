@@ -7,29 +7,28 @@ import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/nami
 import {
     Column,
     CreateDateColumn,
-    Entity,                                // TODO: bei decimal precision angeben
+    Entity,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
-    VersionColumn,    
+    VersionColumn,
 } from 'typeorm';
 import { dbType } from '../../config/db.js';
-import { Address } from './address.entity.js';    
-import { Animal } from './animal.entity.js';   
-import {DecimalTransformer} from './decimal-transformer.js'    
+import { Address } from './address.entity.js';
+import { Animal } from './animal.entity.js';
+import { DecimalTransformer } from './decimal-transformer.js';
 
 @Entity()
 export class Zoo {
-
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
     @VersionColumn()
     readonly version: number | undefined;
-    
+
     @Column('varchar')
-    @ApiProperty ({ example: 'Wilhelma', type: String })
+    @ApiProperty({ example: 'Wilhelma', type: String })
     designation: string | undefined;
 
     @Column('decimal', {
@@ -41,20 +40,20 @@ export class Zoo {
     entranceFee: Decimal | undefined;
 
     @Column('decimal')
-    @ApiProperty( {example: 'false', type: Boolean})
+    @ApiProperty({ example: 'false', type: Boolean })
     open: boolean | undefined;
 
     @Column('varchar')
     @ApiProperty({ example: 'https://zoo.de/', type: String })
     readonly homepage: string | undefined;
-    
-    @OneToOne(()=> Address, (address: Address)=> address.zoo, {
+
+    @OneToOne(() => Address, (address: Address) => address.zoo, {
         cascade: ['insert', 'remove'],
     })
     readonly address: Address | undefined;
 
-    @OneToMany(() => Animal, (animal: Animal)=> animal.zoo, {
-        cascade: ['insert', 'remove'], 
+    @OneToMany(() => Animal, (animal: Animal) => animal.zoo, {
+        cascade: ['insert', 'remove'],
     })
     readonly animals: Animal[] | undefined;
 
@@ -68,7 +67,6 @@ export class Zoo {
     })
     readonly updatedAt: Date | undefined;
 
-    
     public toString = (): string =>
         JSON.stringify({
             id: this.id,
@@ -80,7 +78,4 @@ export class Zoo {
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         });
-
-
-
 }

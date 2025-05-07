@@ -5,7 +5,11 @@ import {
 } from 'class-validator';
 import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 
-export const number2Decimal = ({ value }: { value: Decimal.Value | undefined }) => {
+export const number2Decimal = ({
+    value,
+}: {
+    value: Decimal.Value | undefined;
+}) => {
     if (value === undefined) {
         return;
     }
