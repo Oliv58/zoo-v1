@@ -89,6 +89,7 @@ export default async function setup(project: TestProject) {
 
 // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation
 declare module 'vitest' {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     export interface ProvidedContext {
         tokenRest: string;
         tokenRestUser: string;
